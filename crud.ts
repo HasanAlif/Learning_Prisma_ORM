@@ -20,11 +20,32 @@ async function run() {
 
   const createProfile = await prisma.profile.create({
     data: {
-      bio: "Software developer and blogger.",
-      userId: 1,
+      bio: "Software developer & Tester.",
+      userId: 2,
     },
   });
   console.log("Profile created:", createProfile);
+
+  const includeUsers = await prisma.user.findMany({
+    include: {
+      posts: true,
+      profile: true,
+    },
+  });
+  console.log("All Users: ");
+  console.dir(includeUsers, { depth: Infinity });
+
+  const selectUsers = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      posts: true,
+      profile: true,
+    },
+  });
+  console.log("All Users: ");
+  console.dir(selectUsers, { depth: Infinity });
 }
 
 run()
